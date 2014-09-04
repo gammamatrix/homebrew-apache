@@ -12,6 +12,7 @@ class Httpd22 < Formula
   option "with-brewed-apr", "Use Homebrew's apr and apr-util instead of the bundled versions"
   option "with-brewed-openssl", "Use Homebrew's SSL instead of the system version"
   option "with-brewed-zlib", "Use Homebrew's zlib instead of the system version"
+  option "with-ldap", "Include support for LDAP"
   option "with-privileged-ports", "Use the default ports 80 and 443 (which require root privileges), instead of 8080 and 8443"
 
   if build.with? "brewed-apr"
@@ -79,6 +80,12 @@ class Httpd22 < Formula
       args << "--with-z=#{Formula['zlib'].opt_prefix}"
     else
       args << "--with-z=#{MacOS.sdk_path}/usr"
+    end
+
+    if build.with? 'ldap'
+      args << "--with-ldap"
+      args << "--enable-ldap"
+      args << "--enable-authnz-ldap"
     end
 
     system "./configure", *args
